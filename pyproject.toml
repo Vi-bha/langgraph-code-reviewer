@@ -1,0 +1,7 @@
+[tool.ruff.lint]
+# BLE001: broad `except Exception` is intentional here — LLM API calls can fail
+#   in many undocumented ways (network, rate limit, provider-side errors) and
+#   graceful degradation requires catching all of them, not a specific subset.
+# TRY002: test-only fake exception, not a real error path.
+# SIM117: kept as nested `with` in tests for readability of two independent mocks.
+ignore = ["BLE001", "TRY002", "SIM117"]
