@@ -1,13 +1,14 @@
 import os
 import time
+
 import streamlit as st
 
 from graph_agent import (
-    run_review,
-    get_mermaid_png_bytes,
-    InputValidationError,
-    ConfigError,
     MAX_CODE_CHARS,
+    ConfigError,
+    InputValidationError,
+    get_mermaid_png_bytes,
+    run_review,
 )
 
 st.set_page_config(

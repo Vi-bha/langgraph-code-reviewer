@@ -15,7 +15,6 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import graph_agent
 
-
 # ---------- Input validation ----------
 
 def test_validate_code_input_rejects_empty():
