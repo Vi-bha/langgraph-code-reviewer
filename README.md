@@ -3,10 +3,9 @@ title: LangGraph Code Review Agent
 emoji: 🧩
 colorFrom: indigo
 colorTo: blue
-sdk: streamlit
-sdk_version: "1.38.0"
-python_version: "3.11"
-app_file: app.py
+sdk: gradio
+sdk_version: latest
+app_file: app_gradio.py
 pinned: false
 ---
 
@@ -15,7 +14,6 @@ pinned: false
 A multi-agent PR reviewer built with **LangGraph**. A submitted code file is
 reviewed **in parallel** by three specialist agents (security, style, logic),
 then a tech-lead agent aggregates their findings into one structured review.
-
         START
        /  |  \
 security style logic      <- run in parallel (fan-out)
@@ -23,7 +21,6 @@ security style logic      <- run in parallel (fan-out)
       aggregate            <- waits for all three (fan-in)
           |
          END
-
 
 Fully free to run: Groq's API free tier + free hosting on Streamlit Community
 Cloud or Hugging Face Spaces.
@@ -67,33 +64,6 @@ pytest tests/ -v
 ruff check .
 ```
 
-## Deploy — Streamlit Community Cloud (free)
-
-1. Push this folder to a public GitHub repo.
-2. Go to https://share.streamlit.io -> "New app".
-3. Pick the repo, branch, and set **Main file path** to `app.py`.
-4. In "Advanced settings" -> Secrets, add:
-
-GROQ_API_KEY = "your-key-here"
-
-5. Deploy. You get a public `*.streamlit.app` URL.
-
-## Deploy — Hugging Face Spaces (free)
-
-1. Create a new Space at https://huggingface.co/new-space.
-2. SDK: **Streamlit**. Visibility: Public (or Private).
-3. Push this folder's contents to the Space repo (the YAML block at the top
-   of this README is required by HF Spaces — keep it in place).
-```bash
-   git remote add space https://huggingface.co/spaces/<your-username>/<space-name>
-   git push space main
-```
-4. In the Space -> Settings -> "Repository secrets", add `GROQ_API_KEY`.
-5. The Space builds automatically and gives you a public
-   `huggingface.co/spaces/<user>/<space>` URL.
-
-Both deployments run from the exact same code — no branching needed.
-
 ## Deploy — Docker (any container host, free tier available on most)
 
 ```bash
@@ -102,6 +72,40 @@ docker run -p 8501:8501 -e GROQ_API_KEY="your-key-here" langgraph-code-reviewer
 ```
 Push the image to a free-tier container host (Render, Railway, Fly.io all
 have free tiers) or run it on any VM/cluster.
+
+## Deploy — Streamlit Community Cloud (free)
+
+1. Push this folder to a public GitHub repo.
+2. Go to https://share.streamlit.io -> "New app".
+3. Pick the repo, branch, and set **Main file path** to `app.py`.
+4. In "Advanced settings" -> Secrets, add:
+5. Deploy. You get a public `*.streamlit.app` URL.
+
+## Deploy — Hugging Face Spaces (free)
+
+HF Spaces' free tier no longer offers a plain Streamlit SDK (only Docker, which
+requires a paid tier for this setup), so this repo ships a second UI —
+`app_gradio.py` — built on the same `graph_agent.py` backend, for the free
+Gradio SDK. `app.py` (Streamlit) is unchanged and still deploys to Streamlit
+Cloud as above.
+
+1. Create a new Space at https://huggingface.co/new-space.
+2. SDK: **Gradio**. Hardware: **Free tier / CPU basic**. Visibility: Public (or Private).
+3. Push this folder's contents to the Space repo (the YAML block at the top
+   of this README is required by HF Spaces — keep it in place; `app_file` must
+   point at `app_gradio.py`, not `app.py`).
+```bash
+   git remote add space https://huggingface.co/spaces/<your-username>/<space-name>
+   git push space main --force
+```
+   (`--force` is only needed the first time — a new Space starts with its own
+   auto-generated commit that this overwrites.)
+4. In the Space -> Settings -> "Variables and secrets", add `GROQ_API_KEY`.
+5. The Space builds automatically and gives you a public
+   `huggingface.co/spaces/<user>/<space>` URL.
+
+Both deployments share the same `graph_agent.py` backend — only the UI layer
+differs (`app.py` for Streamlit, `app_gradio.py` for Gradio/HF).
 
 ## Presenting this
 
@@ -119,5 +123,6 @@ have free tiers) or run it on any VM/cluster.
 
 - **LangGraph** — graph orchestration, parallel node execution, state reducers
 - **Groq** (GPT-OSS 120B) — free-tier inference
-- **Streamlit** — UI
+- **Streamlit** — UI (Streamlit Community Cloud deployment)
+- **Gradio** — UI (Hugging Face Spaces deployment)
 - No paid services required anywhere in this stack.
