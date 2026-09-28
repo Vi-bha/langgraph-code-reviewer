@@ -11,6 +11,27 @@ from graph_agent import (
     run_review,
 )
 
+# ---------- ZeroGPU compatibility shim ----------
+# This app is API-only (Groq over HTTP) and never touches a GPU. But on
+# Hugging Face's free Gradio tier, hardware defaults to ZeroGPU, which
+# refuses to start unless at least one function is decorated with
+# @spaces.GPU. This is a documented, standard workaround: a harmless no-op
+# function satisfies the startup check without the app ever actually
+# requesting GPU time. Falls back to a no-op decorator anywhere else
+# (Streamlit Cloud, local dev) where the `spaces` package isn't installed.
+try:
+    import spaces
+
+    @spaces.GPU
+    def _zerogpu_startup_shim():
+        """No-op — satisfies HF ZeroGPU's startup check. This app runs
+        entirely on CPU; it never issues GPU work."""
+        return
+
+    _zerogpu_startup_shim()
+except ImportError:
+    pass
+
 DEMO_CODE = '''import os
 
 def load_user(user_id):

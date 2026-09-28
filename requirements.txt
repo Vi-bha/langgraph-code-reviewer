@@ -1,4 +1,6 @@
 streamlit>=1.38
+gradio>=5.0
+spaces>=0.30
 langgraph>=0.2.34
 langchain-core>=0.3.0
 langchain-groq>=0.2.0
