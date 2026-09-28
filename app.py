@@ -126,6 +126,6 @@ with col2:
 
 st.markdown("---")
 st.caption(
-    "Built with LangGraph (fan-out/fan-in graph) + Groq (Llama 3.3 70B) + Streamlit. "
+    "Built with LangGraph (fan-out/fan-in graph) + Groq (GPT-OSS 120B) + Streamlit. "
     "Free stack, no paid services required."
 )

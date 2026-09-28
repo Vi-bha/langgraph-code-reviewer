@@ -5,6 +5,7 @@ colorFrom: indigo
 colorTo: blue
 sdk: streamlit
 sdk_version: "1.38.0"
+python_version: "3.11"
 app_file: app.py
 pinned: false
 ---
@@ -117,6 +118,6 @@ have free tiers) or run it on any VM/cluster.
 ## Stack
 
 - **LangGraph** — graph orchestration, parallel node execution, state reducers
-- **Groq** (Llama 3.3 70B) — free-tier inference
+- **Groq** (GPT-OSS 120B) — free-tier inference
 - **Streamlit** — UI
 - No paid services required anywhere in this stack.
