@@ -16,14 +16,13 @@ reviewed **in parallel** by three specialist agents (security, style, logic),
 then a tech-lead agent aggregates their findings into one structured review.
 
 
-        START
-       /  |  \
-security style logic      <- run in parallel (fan-out)
-       \  |  /
-      aggregate            <- waits for all three (fan-in)
-          |
-         END
-
+               START
+              /  |  \
+       security style logic      <- run in parallel (fan-out)
+              \  |  /
+             aggregate            <- waits for all three (fan-in)
+                 |
+                END
 
 
 Fully free to run: Groq's API free tier + free hosting on Streamlit Community
